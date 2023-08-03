@@ -7,7 +7,9 @@
 	import type { Validation } from "sveltekit-superforms/index";
 	export let data: Validation<PasswordSchema>;
 
-	const { form, errors, enhance } = superForm(data);
+	const { form, errors, enhance } = superForm(data, {
+		resetForm: true
+	});
 </script>
 
 <section class="px-6 pt-16">
@@ -15,6 +17,7 @@
 		<LockIcon />
 		<span class="ml-4">Password</span>
 	</div>
+	<p class="mt-3 max-w-none text-sm">Change the password associated with your account</p>
 	<form method="POST" action="?/updatePassword" use:enhance class="mt-8 flex flex-col space-y-4">
 		<label for="password" class="space-y-2">
 			<span>New Password</span>
