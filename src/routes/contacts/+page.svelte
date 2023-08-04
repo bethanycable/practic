@@ -12,6 +12,8 @@
 		TableHead,
 		TableHeadCell
 	} from "flowbite-svelte";
+
+	import type { PageData } from "../$types";
 </script>
 
 <div class="py-20">
