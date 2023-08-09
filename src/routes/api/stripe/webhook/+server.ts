@@ -1,3 +1,4 @@
+import { deleteCustomerRecord, updateCustomerRecord } from "$lib/server/customers";
 import { deleteProductRecord, upsertProductRecord } from "$lib/server/products";
 
 import { ENV } from "$lib/server/env";
@@ -37,10 +38,10 @@ export const POST: RequestHandler = async (event) => {
         await deleteProductRecord(stripeEvent.data.object);
         break;
       case "customer.updated":
-        console.log("Customer updated", stripeEvent);
+        await updateCustomerRecord(stripeEvent.data.object);
         break;
       case "customer.deleted":
-        console.log("Customer deleted", stripeEvent);
+        await deleteCustomerRecord(stripeEvent.data.object);
         break;
       case "customer.subscription.created":
         console.log("Customer Subscription created", stripeEvent);
