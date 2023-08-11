@@ -46,6 +46,6 @@ export const freePrice = {
     name: "Free",
     description: "For limited personal use",
     features: productConfig.Free.features,
-    call_to_actions: productConfig.Free.call_to_action
+    call_to_action: productConfig.Free.call_to_action
   },
 };
