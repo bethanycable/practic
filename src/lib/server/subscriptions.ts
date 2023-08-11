@@ -3,7 +3,7 @@ import { stripeSubscriptionSchema } from "$lib/schemas";
 import { supabaseAdmin } from "./supabase-admin";
 
 export async function insertSubscriptionRecord(stripeSubscription: Stripe.Subscription) {
-  const subscription = stripeSubscriptionSchema.parse(stripeSubscriptionSchema);
+  const subscription = stripeSubscriptionSchema.parse(stripeSubscription);
 
   const { data: customer, error: customerError } = await supabaseAdmin
     .from("billing_customers")
