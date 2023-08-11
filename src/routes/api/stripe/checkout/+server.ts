@@ -41,15 +41,21 @@ export const GET: RequestHandler = async (event) => {
       subscription_data: {
         metadata: {
           user_id: session.user.id,
-        }
-      }
+        },
+        trial_period_days: 14,
+        trial_settings: {
+          end_behavior: {
+            missing_payment_method: "cancel",
+          },
+        },
+      },
+      payment_method_collection: "if_required",
     });
 
     if (!checkoutSession.url) {
       throw new Error("Error creating checkout session");
     }
     checkoutUrl = checkoutSession.url;
-
 
   } catch (e) {
     console.log(e);
