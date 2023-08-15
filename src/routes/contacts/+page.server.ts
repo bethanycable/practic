@@ -3,6 +3,9 @@ import { createContactSchema, deleteContactSchema } from "$lib/schemas";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from 'sveltekit-superforms/server';
 
+import { getContactsCount } from "$lib/server/contacts";
+import { getSubcriptionTier } from "$lib/server/subscriptions";
+import { hasReachedMaxContacts } from "$lib/helpers";
 import { supabaseAdmin } from "$lib/server/supabase-admin";
 
 export const load: PageServerLoad = async (event) => {
@@ -38,7 +41,18 @@ export const actions: Actions = {
       throw error(401, "Unauthorized");
     }
 
-    const createContactForm = await superValidate(event, createContactSchema);
+    const [tier, count, createContactForm] = await Promise.all([
+      getSubcriptionTier(session.user.id),
+      getContactsCount(session.user.id),
+      superValidate(event, createContactSchema, {
+        id: "create",
+      }),
+    ]);
+
+    if (hasReachedMaxContacts(tier, count)) {
+      throw error(403, "You hace reached the max number of contacts for your tier. Please upgrade.");
+    }
+
 
     if (!createContactForm.valid) {
       return fail(400, {
