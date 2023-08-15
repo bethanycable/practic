@@ -48,7 +48,7 @@ export async function getCustomerRecord(user_id: string) {
     metadata: {
       user_id: user_id,
     },
-    test_clock: testClock.id,
+    // test_clock: testClock.id,
   });
 
   if (!stripeCustomer) {
