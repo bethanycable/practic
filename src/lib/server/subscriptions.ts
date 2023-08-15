@@ -2,7 +2,7 @@ import { ENV } from "./env";
 import type Stripe from "stripe";
 import { getCustomerRecord } from "./customers";
 import { stripe } from "./stripe";
-import { stripeSubscriptionSchema } from "$lib/schemas";
+import { stripeSubscriptionSchema, stripeProductSchema, type SubscriptionTier, subscriptionProductSchema } from "$lib/schemas";
 import { supabaseAdmin } from "./supabase-admin";
 
 export async function insertSubscriptionRecord(stripeSubscription: Stripe.Subscription) {
@@ -131,4 +131,25 @@ export async function createCheckoutSession(user_id: string, price_id: string) {
     throw new Error("Error creating checkout session");
   }
   return checkoutSession.url;
+}
+
+export async function getSubcriptionTier(user_id: string): Promise<SubscriptionTier> {
+  const { error: subscriptionError, data: subscription } = await supabaseAdmin
+    .from("billing_subscriptions")
+    .select("product:product_id(name)")
+    .eq("user_id", user_id)
+    .in("status", ["active", 'trialing'])
+    .limit(1)
+    .maybeSingle();
+
+  if (subscriptionError || !subscription) {
+    return "Free";
+  }
+
+  try {
+    const tier = subscriptionProductSchema.parse(subscription);
+    return tier.product.name;
+  } catch (e) {
+    return "Free";
+  }
 }

@@ -3,13 +3,15 @@ import { emailSchema, passwordSchema, profileSchema } from "$lib/schemas";
 import { error, fail, redirect } from "@sveltejs/kit";
 import { setError, superValidate } from "sveltekit-superforms/server";
 
+import { getSubcriptionTier } from "$lib/server/subscriptions";
+
 export const load: PageServerLoad = async (event) => {
   const session = await event.locals.getSession();
   if(!session) {
     throw redirect(302, "/login");
   }
 
-  async function getUserProfile(user_id: string) {
+  async function getUserProfile() {
     const { error: profileError, data: profile } = await event.locals.supabase
       .from("profiles")
       .select("*")
@@ -23,7 +25,7 @@ export const load: PageServerLoad = async (event) => {
   }
 
   return {
-    profileForm: superValidate(await getUserProfile(session.user.id), profileSchema, {
+    profileForm: superValidate(await getUserProfile(), profileSchema, {
       id: "profile",
     }),
     emailForm: superValidate({ email: session.user.email }, emailSchema, {
@@ -32,6 +34,7 @@ export const load: PageServerLoad = async (event) => {
     passwordForm: superValidate(passwordSchema, {
       id: "password",
     }),
+    tier: getSubcriptionTier(session.user.id),
   }
 }
 
