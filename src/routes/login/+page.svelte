@@ -15,7 +15,7 @@
 		</div>
 		<Card class="mt-6 w-full" padding="xl" size="md">
 			<!-- Login Form -->
-			<form method="POST" class="flex flex-col space-y-6" use:enhance>
+			<form method="POST" class="flex flex-col space-y-6" use:enhance data-testid="login-form">
 				<label class="space-y-2" for="email">
 					<span>Email</span>
 					<input type="email" name="email" bind:value={$form.email} />

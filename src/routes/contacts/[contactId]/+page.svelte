@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Card } from "flowbite-svelte";
-	import type { PageData } from "./$types";
+	import type { PageData } from "../$types";
 	import { superForm } from "sveltekit-superforms/client";
 	export let data: PageData;
 	const { form, errors, enhance } = superForm(data.updateContactForm);
@@ -12,7 +12,12 @@
 			<h1 class="text-4xl font-semibold">Edit Contact</h1>
 		</div>
 		<Card class="mt-6 w-full" padding="xl" size="md">
-			<form method="POST" action="?/updateContact" class="flex flex-col space-y-6" use:enhance>
+			<form
+				method="POST"
+				action="?/updateContact"
+				class="flex flex-col space-y-6"
+				use:enhance
+				data-testid="edit-contact-form">
 				<label class="space-y-2" for="name">
 					<span>Name</span>
 					<input type="text" name="name" bind:value={$form.name} />

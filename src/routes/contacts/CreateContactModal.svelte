@@ -20,7 +20,12 @@
 </script>
 
 <Modal bind:open size="xs" autoclose={false} class="w-full">
-	<form method="POST" action="?/createContact" class="flex flex-col space-y-6" use:enhance>
+	<form
+		method="POST"
+		action="?/createContact"
+		class="flex flex-col space-y-6"
+		use:enhance
+		data-testid="create-contact-form">
 		<h3 class="text-xl font-medium">Create a Contact</h3>
 		{#if $errors._errors}
 			<span class="block text-red-600 dark:text-red-500">{$errors._errors}</span>
